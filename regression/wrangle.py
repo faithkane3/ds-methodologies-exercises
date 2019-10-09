@@ -8,7 +8,7 @@ import numpy as np
 from env import host, user, password
 
 
-def get_db_url(username, hostname, password, db_name):
+def get_db_url(user, host, password, db_name):
     return f"mysql+pymysql://{user}:{password}@{host}/{db_name}"
 
 url = get_db_url(user, host, password, "telco_churn")
@@ -21,12 +21,13 @@ query = """
 def wrangle_df(df, col):
     df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
     df[col] = df[col].astype('float')
+    return df
 
 def read_sql_query(query, url):
     df = pd.read_sql(query, url)
     return df
 
-def wrangle_telco():
+def wrangle_telco(query, url):
     df = pd.read_sql(query, url)
     df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
     df = pd.read_sql(query, url)
