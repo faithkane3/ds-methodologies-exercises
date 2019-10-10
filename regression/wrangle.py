@@ -5,35 +5,25 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np 
-from env import host, user, password
+from util import get_db_url
 
-
-def get_db_url(user, host, password, db_name):
-    return f"mysql+pymysql://{user}:{password}@{host}/{db_name}"
-
-url = get_db_url(user, host, password, "telco_churn")
-
-query = """
+def get_data_from_sql():
+    query = """
         SELECT customer_id, monthly_charges, total_charges, tenure
         FROM customers
         WHERE contract_type_id = 3;
-"""
-def wrangle_df(df, col):
+    """
+    df = pd.read_sql(query, get_db_url("telco_churn"))
+    return df
+
+
+def clean_data(df):
     df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
-    df[col] = df[col].astype('float')
+    df["total_charges"] = df["total_charges"].astype('float')
+    df = df.dropna()
     return df
-
-def read_sql_query(query, url):
-    df = pd.read_sql(query, url)
-    return df
-
-def wrangle_telco(query, url):
-    df = pd.read_sql(query, url)
-    df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
-    df = pd.read_sql(query, url)
-    return df
-
-
-
        
-
+def wrangle_telco():
+    df = get_data_from_sql()
+    df = clean_data(df)
+    return df 
