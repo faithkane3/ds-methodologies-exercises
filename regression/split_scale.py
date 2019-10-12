@@ -6,6 +6,7 @@ from pydataset import data
 import wrangle
 import util
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, QuantileTransformer, PowerTransformer, RobustScaler, MinMaxScaler
 
 
 def split_my_data(df, train_ratio=.8, seed=123):

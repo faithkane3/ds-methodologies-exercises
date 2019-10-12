@@ -6,7 +6,7 @@ def get_db_url(db_name):
 
 # function looks strips spaces, replaces them with NANs, and converts them to a float
 def space_to_float(df, column):
-    df.column = df.total_charges.str.strip().replace("",np.nan).astype(float)
+    df.column = df.total_charges.str.strip().replace(" ",np.nan).astype(float)
     return df
 
 def wrangle_df(df, col):
