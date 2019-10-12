@@ -11,7 +11,6 @@ from sklearn.model_selection import train_test_split
 def split_my_data(df, train_ratio=.8, seed=123):
     """Takes in a df and returns a test
        and train set
-
     """
     train, test = train_test_split(df, train_size=train_ratio, random_state=seed)
     return train, test
@@ -58,7 +57,6 @@ def scale_inverse(scaler, train_scaled, test_scaled):
     """Takes in the scaler and scaled train and test sets
        and returns the scaler and the train and test sets
        in their original forms before scaling
-
     """
     train = pd.DataFrame(scaler.inverse_transform(train_scaled), columns=train_scaled.columns.values).set_index([train_scaled.index.values])
     test = pd.DataFrame(scaler.inverse_transform(test_scaled), columns=test_scaled.columns.values).set_index([test_scaled.index.values])
@@ -93,7 +91,6 @@ def iqr_robust_scaler(train, test):
        by removing the median and scaling data to the IQR.
        Takes in train and test sets and returns
        the scaler and scaled train and test sets
-
     """
     scaler = RobustScaler(quantile_range=(25.0,75.0), copy=True, with_centering=True, with_scaling=True).fit(train)
     train_scaled = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values])
