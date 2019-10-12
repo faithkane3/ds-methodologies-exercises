@@ -21,7 +21,6 @@ def standard_scaler(train, test):
        Takes in a train and test set of data,
        creates and fits a scaler to the train set,
        returns the scaler, train_scaled, test_scaled
-
     """
     scaler = StandardScaler(copy=True, with_mean=True, with_std=True).fit(train)
     train_scaled = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values])
@@ -45,7 +44,7 @@ def normal_scaler(train, test, seed=123):
     """Quantile transformer, non_linear transformation - uniform
        Takes in a train and test set of data,
        creates and fits a scaler to the train set,
-       returns the scaler, uniform_train, uniform_test
+       returns the scaler, normal_train, normal_test
     """
     scaler = QuantileTransformer(n_quantiles=100, output_distribution='normal', random_state=seed, copy=True).fit(train)
     normal_train = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
