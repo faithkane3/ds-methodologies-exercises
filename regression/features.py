@@ -52,3 +52,29 @@ def lasso_cs_coef(x_train, y_train):
     return coef, plot
 
     
+def number_of_optimum_features(x_train, y_train, x_test, y_test):   
+    """
+    Takes:
+          x_train
+          y_train
+          x_test
+          y_test
+    Returns:
+          int: number of optimum features
+    """ 
+    number_of_features_list = np.arange(1, 3)
+    high_score = 0
+    number_of_features = 0
+    score_list = []
+    for n in range(len(number_of_features_list)):
+        model = LinearRegression()
+        rfe = RFE(model, number_of_features_list[n])
+        x_train_rfe = rfe.fit_transform(x_train, y_train)
+        x_test_rfe = rfe.transform(x_test)
+        model.fit(x_train_rfe, y_train)
+        score = model.score(x_test_rfe, y_test)
+        score_list.append(score)
+        if(score > high_score):
+            high_Score = score
+            number_of_features = number_of_features_list[n]
+    return number_of_features
