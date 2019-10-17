@@ -18,7 +18,7 @@ def split_my_data(df, train_ratio=.8, seed=123):
 
 
 def standard_scaler(train, test):
-    """z-scores, removes mean and scales to unit var
+    """z-scores, removes mean and scales to unit variance.
        Takes in a train and test set of data,
        creates and fits a scaler to the train set,
        returns the scaler, train_scaled, test_scaled
@@ -30,27 +30,28 @@ def standard_scaler(train, test):
 
 
 def uniform_scaler(train, test):
-    """Quantile transformer, non_linear transformation - uniform
+    """Quantile transformer, non_linear transformation - uniform.
+       Reduces the impact of outliers, smooths out unusual distributions.
        Takes in a train and test set of data,
        creates and fits a scaler to the train set,
-       returns the scaler, uniform_train, uniform_test
+       returns the scaler, train_scaled, test_scalexsd
     """
     scaler = QuantileTransformer(n_quantiles=100, output_distribution='uniform', random_state=123, copy=True).fit(train)
     uniform_train = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
     uniform_test = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
-    return scaler, uniform_train, uniform_test
+    return scaler, train_scaled, test_scaled
 
 
 def normal_scaler(train, test, seed=123):
-    """Quantile transformer, non_linear transformation - uniform
+    """Quantile transformer, non_linear transformation - normal
        Takes in a train and test set of data,
        creates and fits a scaler to the train set,
-       returns the scaler, normal_train, normal_test
+       returns the scaler, train_scaled, test_scaled
     """
     scaler = QuantileTransformer(n_quantiles=100, output_distribution='normal', random_state=seed, copy=True).fit(train)
     normal_train = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
     normal_test = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
-    return scaler, normal_train, normal_test
+    return scaler, train_scaled, test_scaled
 
 
 def scale_inverse(scaler, train_scaled, test_scaled):
@@ -73,7 +74,7 @@ def gaussian_scaler(train, test, method='yeo-johnson'):
     scaler = PowerTransformer(method, standardize=False, copy=True).fit(train)
     train_scaled = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values])
     test_scaled = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
-    return scaler, train, test
+    return scaler, train_scaled, test_scaled
 
 def min_max_scaler(train, test):
     """Transforms features by scaling each feature to a given range.

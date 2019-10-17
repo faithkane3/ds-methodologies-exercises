@@ -6,32 +6,35 @@ from sklearn.preprocessing import StandarScaler, MinMaxScaler
 from sklearn.feature_selection import SelectKBest, f_regresssion
 import statsmodel.api as sm 
 
-def select_kbest_freg(x_train, y_train, k):
+def select_kbest_freg(x, y, k):
     """Removes all but highest scoring features
     Takes:
           k - int: number of features
-          x_train - df of features
-          y_train - df of target
+          x - df of features
+          y - df of target
     Returns:
           list of column names of highest scoring features
     """
-    f_selector = SelectKBest(f_regression, k).fit(x_train, y_train)
+    f_selector = SelectKBest(f_regression, k).fit(x, y)
     f_support = f_selector.get_support()
-    f_feature = x_train.loc[:,f_support].columns.tolist()
+    f_feature = x.loc[:,f_support].columns.tolist()
     return f_feature
 
-def ols_backware_elimination(x_train, y_train):
-    """
-
+def ols_backware_elimination(x, y):
+    """Removes all but highest scoring features
+    Takes:
+          x - df of features
+          y - df of target
+    Returns:
+          list of column names of highest scoring features
     """
     cols = list(x_train.columns)
-    pmax = 1
     while (len(cols) > 0):
         p = []
-        x_1 = x_train[cols]
+        x_1 = x[cols]
         x_1 = sm.add_constant(x_1)
-        model = sm.OLS(y_train, x_1).fit()
-        p = pd.Series(model.pvalues.values[1:], index = cols)
+        model = sm.OLS(y, x_1).fit()
+        p = model.pvalues
         pmax = max(p)
         feature_with_p_max = p.idxmax()
         if(pmax > 0.05):
@@ -41,24 +44,25 @@ def ols_backware_elimination(x_train, y_train):
     return cols 
 
 
-def lasso_cs_coef(x_train, y_train):
+def lasso_cs_coef(x, y):
     """
     
     """
-    reg = LassoCV().fit(x_train, y_train)
-    coef = pd.Series(reg.coef_, index = x_train.columns)
+    reg = LassoCV().fit(x, y)
+    coef = pd.Series(reg.coef_, index = x.columns)
     imp_coef = coef.sort_values()
     plot = imp_coef.plot(kind = "barh")
-    return coef, plot
+    plt.show()
+    return coef
 
     
 def number_of_optimum_features(x_train, y_train, x_test, y_test):   
     """
     Takes:
-          x_train
-          y_train
-          x_test
-          y_test
+          x_train: Pandas df
+          y_train: Pandas df
+          x_test: Pandas df
+          y_test: Pandas df
     Returns:
           int: number of optimum features
     """ 
