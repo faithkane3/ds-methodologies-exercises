@@ -37,8 +37,8 @@ def uniform_scaler(train, test):
        returns the scaler, train_scaled, test_scalexsd
     """
     scaler = QuantileTransformer(n_quantiles=100, output_distribution='uniform', random_state=123, copy=True).fit(train)
-    uniform_train = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
-    uniform_test = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
+    train_scaled = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
+    test_scaled = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
     return scaler, train_scaled, test_scaled
 
 
@@ -49,8 +49,8 @@ def normal_scaler(train, test, seed=123):
        returns the scaler, train_scaled, test_scaled
     """
     scaler = QuantileTransformer(n_quantiles=100, output_distribution='normal', random_state=seed, copy=True).fit(train)
-    normal_train = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
-    normal_test = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
+    train_scaled = pd.DataFrame(scaler.transform(train), columns=train.columns.values).set_index([train.index.values]) 
+    test_scaled = pd.DataFrame(scaler.transform(test), columns=test.columns.values).set_index([test.index.values])
     return scaler, train_scaled, test_scaled
 
 
