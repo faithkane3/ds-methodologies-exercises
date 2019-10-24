@@ -11,10 +11,11 @@ def prep_iris(df):
     encoder = LabelEncoder()
     encoder.fit(df.species)
     encoder.transform(df.species)
-    return df
+    return df, encoder
 
 
 def prep_titanic(df):
+    df.drop(columns=["deck"], inplace=True)
     df.fillna(np.nan, inplace=True)
     df = df[~df.embarked.isnull()]
     encoder = LabelEncoder()
@@ -25,4 +26,17 @@ def prep_titanic(df):
     df.age = scaler.transform(df[["age"]])
     scaler.fit(df[["fare"]])
     df.fare = scaler.transform(df[["fare"]])
-    return df
+    return df, encoder
+
+
+def prep_titanic2(df):
+    df.drop(columns=["deck"], inplace=True)
+    df.fillna(np.nan, inplace=True)
+    df = df[~df.embarked.isnull()]
+    encoder = LabelEncoder()
+    encoder.fit(df.embarked)
+    df.embarked = encoder.transform(df.embarked)
+    scaler = MinMaxScaler()
+    scaler.fit(df[["age", "fare"]])
+    df[["age", "fare"]] = scaler.transform(df[["age", "fare"]])
+    return df, encoder
