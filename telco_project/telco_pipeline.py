@@ -48,6 +48,16 @@ def peekatdata(df):
     print("\nTail Preview:\n")
     print(df.tail())
 
+
+def df_value_counts(df):
+    valcount_df = pd.DataFrame(df.apply(lambda x: x.value_counts(dropna=False).count()))
+    return valcount_df
+
+
+def percent_missing(df):
+    df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
+    return df.isnull().sum() / len(df) * 100
+
 # split the data
 
 def split(df, target, train_prop, seed):
