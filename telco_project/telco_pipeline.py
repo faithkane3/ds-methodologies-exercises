@@ -103,18 +103,18 @@ def encode(train, test, col_name):
 
 # scale the data
 
-def scale_minmax(train, test, column_list):
+def scale_minmax(x_train, x_test, column_list):
     scaler = MinMaxScaler()
     column_list_scaled = [col + '_scaled' for col in column_list]
-    train_scaled = pd.DataFrame(scaler.fit_transform(train[column_list]), 
+    x_train_scaled = pd.DataFrame(scaler.fit_transform(x_train[column_list]), 
                                 columns = column_list_scaled, 
-                                index = train.index)
-    train = train.join(train_scaled)
-    test_scaled = pd.DataFrame(scaler.transform(test[column_list]), 
+                                index = x_train.index)
+    x_train = x_train.join(x_train_scaled)
+    x_test_scaled = pd.DataFrame(scaler.transform(x_test[column_list]), 
                                 columns = column_list_scaled, 
-                                index = test.index)
-    test = test.join(test_scaled)
-    return train, test, scaler
+                                index = x_test.index)
+    x_test = x_test.join(x_test_scaled)
+    return x_train, x_test, scaler
 
 
 # prepare the data using 
