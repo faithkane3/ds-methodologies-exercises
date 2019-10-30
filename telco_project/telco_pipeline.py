@@ -27,7 +27,6 @@ def clean_data(df):
     df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
     df["total_charges"] = df["total_charges"].astype('float')
     df = df.dropna()
-    df = df.drop(columns="customer_id")
     return df
 
 
@@ -68,7 +67,7 @@ def impute(train, test, my_strategy, column_list):
     test[column_list] = imputer.transform(test[column_list])
     return train, test, imputer
 
-# encode the data if needed
+# encode the data
 
 def encode(train, test, col_name):
     encoded_values = sorted(list(train[col_name].unique()))
@@ -118,7 +117,7 @@ def scale_minmax(x_train, x_test, column_list):
 
 def prepare(df, drop_cols, float_cols, obj_cols, target, train_prop, seed, impute_cols, impute_strategy, encode_col, scale_cols):
     df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
-    df.fillna(np.nan, inplace=True)
+    df = df.dropna()
     df[float_cols] = df[float_cols].astype(float)
     df[obj_cols] = df[obj_cols].astype(object)
     df.drop(columns=drop_cols, inplace=True)
