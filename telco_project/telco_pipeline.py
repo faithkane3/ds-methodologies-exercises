@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MinMaxScaler
 
-# pull in data using sql query
+# acquire data using sql query
 
 def get_db_url(db_name):
     return f"mysql+pymysql://{user}:{password}@{host}/{db_name}"
@@ -30,9 +30,6 @@ def clean_data(df):
     df = df.drop(columns="customer_id")
     return df
 
-def rename_columns(df):
-    df['species']=df['species_name']
-    return df
 
 # explore data
 
