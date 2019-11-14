@@ -135,8 +135,3 @@ def get_iris_data():
     '''
     return pd.read_sql(query, get_connection('iris_db'))
 
-# get mall customer data
-
-def get_mallcustomer_data():
-    df = pd.read_sql('SELECT * FROM customers;', get_connection('mall_customers'))
-    return df.set_index('customer_id')
