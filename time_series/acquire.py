@@ -71,8 +71,8 @@ def get_all_data():
     stores = get_store_data()
 
     sales = sales.rename(columns={'item': 'item_id', 'store': 'store_id'})
-
-    return sales.merge(items, on='item_id').merge(stores, on='store_id')
+    df = sales.merge(items, on='item_id').merge(stores, on='store_id')
+    return df
 
 def get_opsd_data(use_cache=True):
     if use_cache and path.exists('opsd.csv'):
