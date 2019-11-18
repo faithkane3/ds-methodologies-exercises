@@ -72,6 +72,7 @@ def get_all_data():
 
     sales = sales.rename(columns={'item': 'item_id', 'store': 'store_id'})
     df = sales.merge(items, on='item_id').merge(stores, on='store_id')
+    df = df.drop(columns=['Unnamed: 0_x', 'Unnamed: 0_y', 'level_0', 'index', 'Unnamed: 0'])
     return df
 
 def get_opsd_data(use_cache=True):
