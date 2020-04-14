@@ -13,6 +13,7 @@ def prep_iris(df):
     test['species'] = le.transform(test[['species']])
     return train, test
 
+
 def inverse_encode(train_encoded, test_encoded):
     train['species'] = le.inverse_transform(train.species)
     test['species'] = le.inverse_transform(test.species)
