@@ -7,7 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MinMaxScaler
 
 def prep_iris(df):
-    train, test = train_test_split(df, train_size=.75, random_state=123)
+    train, test = train_test_split(df, train_size=.75, stratify=df.species, random_state=123)
     le = LabelEncoder()
     train['species'] = le.fit_transform(train[['species']])
     test['species'] = le.transform(test[['species']])
