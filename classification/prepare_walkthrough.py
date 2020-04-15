@@ -6,12 +6,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MinMaxScaler
 
-def prep_iris(df):
-    train, test = train_test_split(df, train_size=.75, stratify=df.species, random_state=123)
+def label_encode(train, test):
     le = LabelEncoder()
-    train['species'] = le.fit_transform(train[['species']])
-    test['species'] = le.transform(test[['species']])
-    return train, test
+    train['species'] = le.fit_transform(train.species)
+    test['species'] = le.transform(test.species)
+    return le, train, test
+
+
+def prep_iris(df):
+    df = df.drop(columns='species_id')
+    df = df.rename(columns={'species_name': 'species'})
+    train, test = train_test_split(df, train_size=.75, stratify=df.species, random_state=123)
+    train, test, le = label_encode(train, test)
+    return train, test, le
 
 
 def inverse_encode(train_encoded, test_encoded):
@@ -62,7 +69,7 @@ def ohe_columns(train, test):
     return ohe, train, test
 
 def prep_titanic(df):
-    
+
     # drop the deck column bc most values Null
     drop_columns(df)
     
