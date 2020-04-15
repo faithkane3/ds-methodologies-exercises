@@ -21,14 +21,16 @@ def prep_iris(df):
     return train, test, le
 
 
-def inverse_encode(train_encoded, test_encoded):
+def inverse_encode(train, test, le):
     train['species'] = le.inverse_transform(train.species)
     test['species'] = le.inverse_transform(test.species)
     return train, test
 
 def drop_columns(df):
     df.drop(columns=['deck'], inplace=True)
-    return dfdef impute_embark_town(train, test):
+    return df
+
+def impute_embark_town(train, test):
     train['embark_town'] = train['embark_town'].fillna('Southampton')
     test['embark_town'] = test['embark_town'].fillna('Southampton')
     return train, test
@@ -73,7 +75,7 @@ def prep_titanic(df):
     # drop the deck column bc most values Null
     drop_columns(df)
     
-    train, test = train_test_split(df, train_size=.75, stratify=titanic_df.survived, random_state=123)
+    train, test = train_test_split(df, train_size=.75, stratify=df.survived, random_state=123)
     
     # impute 2 NaNs in embark_town with most frequent value
     train, test = impute_embark_town(train, test)
