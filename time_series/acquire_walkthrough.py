@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 
-def def get_df(name):
+def get_df(name):
     """
     This function takes in the string
     '/items', '/stores', or '/sales' and
@@ -38,9 +38,11 @@ def get_store_data():
     """
     This function checks for csv files
     for items, sales, and stores, and 
-    if there are none, it creates them
-    and merges them into one df
+    if there are none, it creates them and 
+    merges them into one df that it writes
+    to csv and reads in the future
     """
+    # check for csv files or create them
     if os.path.isfile('items.csv'):
         items_df = pd.read_csv('items.csv', index_col=0)
     else:
@@ -53,12 +55,21 @@ def get_store_data():
         sales_df = pd.read_csv('sales.csv', index_col=0)
     else:
         sales_df = get_df('sales')
-    
-    df = pd.merge(sales_df, stores_df, left_on='store', right_on='store_id').drop(columns={'store'})
-    df = pd.merge(df, items_df, left_on='item', right_on='item_id').drop(columns={'item'})
-    df['sale_date'] = pd.to_datetime(df.sale_date)
-    df = df.set_index('sale_date').sort_index()
-    return df
+    if os.path.isfile('big_df.csv'):
+        df = pd.read_csv('big_df.csv', parse_dates=True, index_col=0)
+        return df
+    else:
+        # merge all of the DataFrames into one
+        df = pd.merge(sales_df, stores_df, left_on='store', right_on='store_id').drop(columns={'store'})
+        df = pd.merge(df, items_df, left_on='item', right_on='item_id').drop(columns={'item'})
+
+        # convert sale_date to DateTime Index
+        df['sale_date'] = pd.to_datetime(df.sale_date)
+        df = df.set_index('sale_date').sort_index()
+
+        # write merged DateTime df with all data to directory for future use
+        df.to_csv('big_df.csv')
+        return df
 
 # Function that checks for a csv, and if it doesn't exist it reads url and creates one
 # Function returns the df with a DateTime Index
