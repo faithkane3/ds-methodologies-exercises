@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 
-def get_df(name):
+def def get_df(name):
     """
     This function takes in the string
     '/items', '/stores', or '/sales' and
@@ -15,28 +15,26 @@ def get_df(name):
     response = requests.get(api_url + name)
     data = response.json()
     
-    # create first DataFrame
-    df = pd.DataFrame(data['payload'][name])
+    # create list from 1st page
+    my_list = data['payload'][name]
     
-    # loop through the pages of items
-    if data['payload']['next_page'] != None:
+    # loop through the pages and add to list
+    while data['payload']['next_page'] != None:
         response = requests.get(base_url + data['payload']['next_page'])
         data = response.json()
-
-        # create next DataFrame
-        df2 = pd.DataFrame(data['payload'][name])
-        
-        # concat new DataFrame to old DataFrame
-        df = pd.concat([df, df2]).reset_index(drop=True)
-        df.to_csv(name + '.csv')
-    else:
-        df.to_csv(name + '.csv')
+        my_list.extend(data['payload'][name])
+    
+    # Create DataFrame from list
+    df = pd.DataFrame(my_list)
+    
+    # Write DataFrame to csv file for future use
+    df.to_csv(name + '.csv')
     return df
 
 # Function that checks for a csv, and if one doesn't exist it creates one
 # The function should also create one large df using all three df
 
-def big_df():
+def get_store_data():
     """
     This function checks for csv files
     for items, sales, and stores, and 
@@ -59,7 +57,7 @@ def big_df():
     df = pd.merge(sales_df, stores_df, left_on='store', right_on='store_id').drop(columns={'store'})
     df = pd.merge(df, items_df, left_on='item', right_on='item_id').drop(columns={'item'})
     df['sale_date'] = pd.to_datetime(df.sale_date)
-    df = df.set_index('sale_date')
+    df = df.set_index('sale_date').sort_index()
     return df
 
 # Function that checks for a csv, and if it doesn't exist it reads url and creates one
@@ -74,6 +72,6 @@ def german_energy_csv():
         df = pd.read_csv('german_energy.csv', parse_dates=True, index_col=0)
     else:
         url = 'https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv'
-        df = pd.read_csv(url, parse_dates=True).set_index('Date')
+        df = pd.read_csv(url, parse_dates=True).set_index('Date').sort_index()
         df.to_csv('german_energy.csv')
     return df
