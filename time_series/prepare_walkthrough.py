@@ -16,13 +16,13 @@ from acquire_walkthrough import get_store_data
 
 # Function for numeric distributions
 
-def numeric_hists(df):
+def numeric_hists(df, bins=20):
     """
     Function to select only numeric dtypes and
     display histograms for each numeric column
     """
-    num_df = df.select_dtypes(include=['int64', 'float64'])
-    num_df.hist(color='thistle')
+    num_df = df.select_dtypes(include=np.number)
+    num_df.hist(bins=bins, color='thistle')
     plt.suptitle('Numeric Column Distributions')
     plt.show()
 
