@@ -47,16 +47,19 @@ def get_store_data():
         items_df = pd.read_csv('items.csv', index_col=0)
     else:
         items_df = get_df('items')
+        
     if os.path.isfile('stores.csv'):
         stores_df = pd.read_csv('stores.csv', index_col=0)
     else:
         stores_df = get_df('stores')
+        
     if os.path.isfile('sales.csv'):
         sales_df = pd.read_csv('sales.csv', index_col=0)
     else:
         sales_df = get_df('sales')
+        
     if os.path.isfile('big_df.csv'):
-        df = pd.read_csv('big_df.csv', parse_dates=True, index_col=0)
+        df = pd.read_csv('big_df.csv', parse_dates=True, index_col='sale_date')
         return df
     else:
         # merge all of the DataFrames into one
@@ -65,7 +68,7 @@ def get_store_data():
 
         # convert sale_date to DateTime Index
         df['sale_date'] = pd.to_datetime(df.sale_date)
-        df = df.set_index('sale_date').sort_index()
+        df = df.sort_index()
 
         # write merged DateTime df with all data to directory for future use
         df.to_csv('big_df.csv')
