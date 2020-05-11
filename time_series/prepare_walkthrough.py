@@ -18,7 +18,8 @@ from acquire_walkthrough import get_store_data
 
 def numeric_hists(df, bins=20):
     """
-    Function to select only numeric dtypes and
+    Function to take in a DataFrame, bins default 20,
+    select only numeric dtypes, and
     display histograms for each numeric column
     """
     num_df = df.select_dtypes(include=np.number)
