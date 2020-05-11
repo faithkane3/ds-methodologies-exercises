@@ -79,8 +79,8 @@ def get_store_data():
 
 def german_energy_csv():
     """
-    This function takes in a string csv url
-    and returns a df with a datetime index
+    This function returns a df with a datetime index
+    using the opsd_germany url/csv.
     """
     if os.path.isfile('german_energy.csv'):
         df = pd.read_csv('german_energy.csv', parse_dates=True, index_col=0)
