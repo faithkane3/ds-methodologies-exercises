@@ -34,7 +34,7 @@ def get_all_urls():
     return urls
 
 
-def acquire_blog_articles(urls):
+def get_blog_articles(urls):
     '''
     This function takes in a list of Codeup Blog urls and a dictionary headers 
     and scrapes the title and text for each url returning a list of dictionaries
