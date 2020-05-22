@@ -24,7 +24,7 @@ def get_all_urls():
     urls = []
     
     # Create a list of the element tags that hold the href/links
-    link_list = soup.find_all(class_="jet-listing-dynamic-link__link")
+    link_list = soup.find_all('a', class_='jet-listing-dynamic-link__link')
     
     # get the href/link from each element tag in my list
     for link in link_list:
@@ -61,10 +61,10 @@ def get_blog_articles(urls, cache=False):
             soup = BeautifulSoup(response.text, 'html.parser')
 
             # Save the title of each blog in variable title
-            title = soup.find('h1', itemprop='headline' ).get_text()
+            title = soup.find('h1', itemprop='headline' ).text
 
             # Save the text in each blog to variable text
-            text = soup.find('div', itemprop='text').get_text()
+            text = soup.find('div', itemprop='text').text
 
             # Create a dictionary holding the title and text for each blog
             article = {'title': title, 'content': text}
@@ -88,10 +88,10 @@ def get_news_articles(cache=False):
     and entertainment and writing the returned df to a csv file.
     '''
     # default to read in a csv instead of scrape for df
-    if fresh == False:
+    if cache == False:
         df = pd.read_csv('articles.csv', index_col=0)
         
-    # fresh == True completes a fresh scrape for df    
+    # cache == True completes a fresh scrape for df    
     else:
     
         # Set base_url that will be used in get request
@@ -113,13 +113,13 @@ def get_news_articles(cache=False):
 
 
             # Scrape a ResultSet of all the news cards on the page
-            cards = soup.find_all(class_='news-card')
+            cards = soup.find_all('div', class_='news-card')
 
             # Loop through each news card on the page and get what we want
             for card in cards:
-                title = card.find('span', itemprop='headline' ).get_text()
-                author = card.find('span', class_='author').get_text()
-                content = card.find('div', itemprop='articleBody').get_text()
+                title = card.find('span', itemprop='headline' ).text
+                author = card.find('span', class_='author').text
+                content = card.find('div', itemprop='articleBody').text
 
                 # Create a dictionary, article, for each news card
                 article = ({'topic': topic, 
