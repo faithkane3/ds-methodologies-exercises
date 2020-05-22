@@ -43,7 +43,7 @@ def get_blog_articles(urls, cache=False):
     with the title and text for each blog, converts list to df, and returns df.
     '''
 
-    if fresh == False:
+    if cache == False:
         df = pd.read_csv('big_blogs.csv', index_col=0)
     else:
         headers = {'User-Agent': 'Codeup Bayes Data Science'} 
