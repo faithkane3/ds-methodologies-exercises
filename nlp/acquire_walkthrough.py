@@ -35,11 +35,11 @@ def get_all_urls():
     return urls
 
 
-def get_blog_articles(urls, fresh=False):
+def get_blog_articles(urls, cache=False):
     '''
     This function takes in a list of Codeup Blog urls and a boolean argument
-    with default fresh == False for performing a fresh scrape and returns a df from csv file.
-    If fresh == True, the function scrapes the title and text for each url, creates a list of dictionaries
+    with default cache == False which returns a df from a csv file.
+    If cache == True, the function scrapes the title and text for each url, creates a list of dictionaries
     with the title and text for each blog, converts list to df, and returns df.
     '''
 
@@ -80,10 +80,12 @@ def get_blog_articles(urls, fresh=False):
     return df
 
 
-def get_news_articles(fresh=False):
+def get_news_articles(cache=False):
     '''
-    This function gets a list of urls from the main
-    page of the inshort card preview page.
+    This function uses a cache parameter with default cache == False to give the option of 
+    returning in a df of inshorts topics and info by reading a csv file or
+    of doing a fresh scrape of inshort pages with topics business, sports, technology,
+    and entertainment and writing the returned df to a csv file.
     '''
     # default to read in a csv instead of scrape for df
     if fresh == False:
