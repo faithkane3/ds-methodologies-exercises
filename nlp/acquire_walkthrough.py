@@ -37,7 +37,7 @@ def get_all_urls():
 
 def get_blog_articles(urls, cache=False):
     '''
-    This function takes in a list of Codeup Blog urls and a boolean argument
+    This function takes in a list of Codeup Blog urls and a parameter
     with default cache == False which returns a df from a csv file.
     If cache == True, the function scrapes the title and text for each url, creates a list of dictionaries
     with the title and text for each blog, converts list to df, and returns df.
