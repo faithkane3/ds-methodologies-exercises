@@ -59,7 +59,7 @@ def stem(df, col):
 def lemmatize(df, col):
     '''
     This function takes in a df and a string for column name and
-    returns a the original df with a new column called 'lemmatized'.
+    returns the original df with a new column called 'lemmatized'.
     '''
     # Create the lemmatizer
     wnl = nltk.stem.WordNetLemmatizer()
