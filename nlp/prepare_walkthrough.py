@@ -47,10 +47,10 @@ def stem(df, col):
     # Create porter stemmer
     ps = nltk.porter.PorterStemmer()
     
-    # Create a Series of lists of stemmed words using our cleaned tokens
+    # Stem each token from our clean_tokes Series of lists
     stems = df[col].apply(lambda row: [ps.stem(word) for word in row])
     
-    # Join our cleaned, stemmed lists of words back into strings of words/tokens
+    # Join our cleaned, stemmed lists of words back into sentences
     df['stemmed'] = stems.str.join(' ')
     
     return df
@@ -61,8 +61,13 @@ def lemmatize(df, col):
     This function takes in a df and a string for column name and
     returns a the original df with a new column called 'lemmatized'.
     '''
+    # Create the lemmatizer
     wnl = nltk.stem.WordNetLemmatizer()
+    
+    # Lemmatize each token from our clean_tokes Series of lists
     lemmas = df[col].apply(lambda row: [wnl.lemmatize(word) for word in row])
+    
+    # Join the cleaned and lemmatized tokens back into sentences
     df['lemmatized'] = lemmas.str.join(' ')
     return df
 
@@ -78,7 +83,7 @@ def remove_stopwords(df, col):
     # Split words in column
     words = df[col].str.split()
     
-    # Check each words in each row of the column against stopword_list and return only those that are not
+    # Check each word in each row of the column against stopword_list and return only those that are not in list
     filtered_words = words.apply(lambda row: [word for word in row if word not in stopword_list])
     
     # Create new column of words that have stopwords removed
@@ -87,3 +92,28 @@ def remove_stopwords(df, col):
     return df
 
 
+def prep_article_data(df):
+    '''
+    This function takes in the news articles df and
+    returns the df with original columns plus cleaned
+    and lemmatized content without stopwords.
+    '''
+    # Do basic clean on article content
+    df = basic_clean(df, 'content')
+    
+    # Tokenize clean article content
+    df = tokenize(df, 'basic_clean')
+    
+    # Stem cleaned and tokenized article content
+    df = stem(df, 'clean_tokes')
+    
+    # Remove stopwords from Lemmatized article content
+    df = remove_stopwords(df, 'stemmed')
+    
+    # Lemmatize cleaned and tokenized article content
+    df = lemmatize(df, 'clean_tokes')
+    
+    # Remove stopwords from Lemmatized article content
+    df = remove_stopwords(df, 'lemmatized')
+    
+    return df[['topic', 'title', 'author', 'content', 'clean_stemmed', 'clean_lemmatized']]
