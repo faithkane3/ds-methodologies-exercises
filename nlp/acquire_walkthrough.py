@@ -12,7 +12,7 @@ def get_all_urls():
     # The main Codeup blog page with all the urls
     url = 'https://codeup.com/resources/#blog'
     
-    headers = {'User-Agent': 'Codeup Bayes Data Science'} 
+    headers = {'User-Agent': 'Codeup Data Science'} 
     
     # Send request to main page and get response
     response = get(url, headers=headers)
@@ -30,7 +30,7 @@ def get_all_urls():
     for link in link_list:
         
         # Add the link to my urls list
-        urls.append(link.get('href'))
+        urls.append(link['href'])
         
     return urls
 
@@ -46,7 +46,7 @@ def get_blog_articles(urls, cache=False):
     if cache == False:
         df = pd.read_csv('big_blogs.csv', index_col=0)
     else:
-        headers = {'User-Agent': 'Codeup Bayes Data Science'} 
+        headers = {'User-Agent': 'Codeup Data Science'} 
 
         # Create an empty list to hold dictionaries
         articles = []
@@ -94,10 +94,12 @@ def get_news_articles(cache=False):
     # cache == True completes a fresh scrape for df    
     else:
     
-        # Set base_url that will be used in get request
+        # Set base_url and headers that will be used in get request
 
         base_url = 'https://inshorts.com/en/read/'
+        headers = {'User-Agent': 'Codeup Data Science'}
 
+        # List of topics to scrape
         topics = ['business', 'sports', 'technology', 'entertainment']
 
         # Create an empty list, articles, to hold our dictionaries
@@ -106,7 +108,7 @@ def get_news_articles(cache=False):
         for topic in topics:
 
             # Get a response object from the main inshorts page
-            response = get(base_url + topic)
+            response = get(base_url + topic, headers=headers)
 
             # Create soup object using response from inshort
             soup = BeautifulSoup(response.text, 'html.parser')
