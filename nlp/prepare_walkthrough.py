@@ -21,7 +21,7 @@ def basic_clean(df, col):
     passed column text normalized.
     '''
     df['basic_clean'] = df[col].str.lower()\
-                    .str.replace(r"[^A-z0-9'\s]", '', regex=True)\
+                    .replace(r'[^\w\s]', '', regex=True)\
                     .str.normalize('NFKC')\
                     .str.encode('ascii', 'ignore')\
                     .str.decode('utf-8', 'ignore')
