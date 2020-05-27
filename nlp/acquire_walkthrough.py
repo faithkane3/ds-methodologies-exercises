@@ -113,7 +113,6 @@ def get_news_articles(cache=False):
             # Create soup object using response from inshort
             soup = BeautifulSoup(response.text, 'html.parser')
 
-
             # Scrape a ResultSet of all the news cards on the page
             cards = soup.find_all('div', class_='news-card')
 
