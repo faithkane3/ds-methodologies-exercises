@@ -10,8 +10,6 @@ import nltk
 from nltk.tokenize.toktok import ToktokTokenizer
 from nltk.corpus import stopwords
 
-from acquire_walkthrough import get_news_articles
-
 
 
 def basic_clean(df, col):
